@@ -45,4 +45,20 @@ public class BookRepository
         return books;
     }
 
+    // CREATE: insert a new book. The database chooses its book_id.
+    public async Task AddAsync(Book book)
+    {
+        const string sql = "INSERT INTO lending.book (title, category, price) " +
+                           "VALUES (@title, @category, @price);";
+
+        await using var command = _dataSource.CreateCommand(sql);
+        command.Parameters.AddWithValue("title", book.Title);
+        // A C# null must be sent as DBNull.Value, which is how a database NULL is written.
+        command.Parameters.AddWithValue("category", (object?)book.Category ?? DBNull.Value);
+        command.Parameters.AddWithValue("price", (object?)book.Price ?? DBNull.Value);
+
+        await command.ExecuteNonQueryAsync();           // runs SQL that returns no rows
+    }
+
+
 }
