@@ -80,7 +80,7 @@ public class MembersController : Controller
     }
     // GET /Members/Delete/5 : ask "are you sure?"
     public async Task<IActionResult> Delete(long id)
-    {
+    { 
         var member = await _members.GetByIdAsync(id);
         if (member == null)
         {

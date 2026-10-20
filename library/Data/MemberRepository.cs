@@ -88,7 +88,7 @@ public class MemberRepository
         await command.ExecuteNonQueryAsync();
     }
 
-    // DELETE: remove one member.
+    // DELETE: remove one member. 
     public async Task DeleteAsync(long id)
     {
         const string sql = "DELETE FROM lending.member WHERE member_id = @id;";
