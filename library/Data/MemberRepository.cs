@@ -1,5 +1,5 @@
-﻿using Npgsql;
-using library.Models;
+﻿using library.Models;
+using Npgsql;
 
 namespace library.Data;
 
