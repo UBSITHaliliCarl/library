@@ -8,4 +8,4 @@ public class Member
         public string Phone { get; set; } = "";   // phone     VARCHAR(20) NOT NULL 
         public string MemberType { get; set; } = "";   // member_type     VARCHAR(50) NOT NULL 
         public string JoinDate { get; set; } = "";   // phone     VARCHAR(20) NOT NULL 
-    }
+    } 
