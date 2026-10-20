@@ -1,31 +1,96 @@
+/* Modern Typography & Root Dark Variables */
+:root {
+    --bg-main: #0f172a; /* Deep slate dark */
+    --bg-card: #1e293b; /* Slightly lighter slate for cards */
+    --border-color: #334155; /* Subtle border shade */
+    --text-main: #f8fafc; /* Crisp white text */
+    --text-muted: #94a3b8; /* Muted gray-blue text */
+    --accent-blue: #3b82f6; /* Vibrant blue accent */
+    --accent-hover: #2563eb; /* Deeper blue on hover */
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: inherit;
 }
 
+/* Consistent Focus States with Blue Accent */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem var(--bg-main), 0 0 0 0.25rem var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+/* Cards with Slate & Blue Theme */
+.card {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Tables */
+.table {
+    color: var(--text-main) !important;
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    color: var(--text-main) !important;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* Forms & Inputs */
+.form-control, .form-select {
+    background-color: #0b1329 !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+    .form-control:focus, .form-select:focus {
+        background-color: #0b1329 !important;
+        color: var(--text-main) !important;
+        border-color: var(--accent-blue) !important;
+    }
+
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    color: var(--text-muted);
+    text-align: end;
 }
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+    text-align: start;
 }
+
+/* Buttons with Blue Styling */
+.btn-primary {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+    .btn-primary:hover {
+        background-color: var(--accent-hover);
+        border-color: var(--accent-hover);
+    }
