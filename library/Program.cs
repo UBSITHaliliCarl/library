@@ -1,5 +1,6 @@
-using Npgsql;
 using library.Data;
+using library.Repositories;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddSingleton(dataSource);
 // Repositories: one new object per web request.
 builder.Services.AddScoped<BookRepository>();
 builder.Services.AddScoped<MemberRepository>();
+builder.Services.AddScoped<NoteRepository>();
 
 var app = builder.Build();
 
