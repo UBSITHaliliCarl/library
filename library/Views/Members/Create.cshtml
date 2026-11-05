@@ -1,6 +1,6 @@
 ﻿@model Member
 @{
-    ViewData["FullName"] = "Add a member";
+    ViewData["Title"] = "Add a member";
 }
 
 <h1 class="mb-3">Add a member</h1>
@@ -20,13 +20,15 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3"> 
         <label asp-for="MemberType" class="form-label"></label>
-        <select asp-for="MemberType" class="form-select">
-            <option value="">(none)</option>
-            <option>Regular</option>
-            <option>Student</option>
-            <option>Senior</option>
-        </select>
+        <input asp-for="MemberType" class="form-control" />
+        <span asp-validation-for="MemberType" class="text-danger"></span>
     </div>
 
     <div class="mb-3">

@@ -1,100 +1,101 @@
-﻿using Npgsql;
-using library.Models;
+﻿using library.Models;
+using Npgsql;
+
 namespace library.Data;
 
+// Every SQL statement about members lives in this one class.
 public class MemberRepository
 {
     private readonly NpgsqlDataSource _dataSource;
+
+    // ASP.NET Core hands in the data source that Program.cs registered.
     public MemberRepository(NpgsqlDataSource dataSource)
     {
         _dataSource = dataSource;
     }
-    // Turns the current row into a Member. Column order must match the SELECT lists below:
-    // member_id, name, email, phone, member_type, join_date
-    // NULL email or phone becomes "", and the DATE becomes text like 2026-01-08.
+
+    // Copies the current row of the reader into a Member.
+    // The positions 0 to 3 match the column order in the SELECT statements.
     private static Member ReadMember(NpgsqlDataReader reader)
     {
         return new Member
         {
             MemberId = reader.GetInt64(0),
-            name = reader.GetString(1),
-            Email = reader.IsDBNull(2) ? "" : reader.GetString(2),
-            Phone = reader.IsDBNull(3) ? "" : reader.GetString(3),
-            MemberType = reader.GetString(4),
-            JoinDate = reader.GetFieldValue<DateOnly>(5).ToString("yyyy-MM-dd")
+            FullName = reader.GetString(1),
+            Email = reader.IsDBNull(2) ? null : reader.GetString(2), // NULL becomes null
+            MemberType = reader.GetString(3)
         };
     }
-    // Blank text is stored as NULL. This matters for email: it is UNIQUE, and
-    // two members with "" would clash, while any number of NULLs are fine.
-    private static object ToDb(string? text)
-    {
-        return string.IsNullOrWhiteSpace(text) ? DBNull.Value : text.Trim();
-    }
-    private static DateOnly ToDate(string? text)
-    {
-        return DateOnly.TryParseExact(text, "yyyy-MM-dd", out var date)
-            ? date
-            : DateOnly.FromDateTime(DateTime.Today);
-    }
-    // READ: every member, sorted by name.
+
+    // READ: every member, sorted by full_name.
     public async Task<List<Member>> GetAllAsync()
     {
-        const string sql = "SELECT member_id, name, email, phone, member_type, join_date " +
-                           "FROM lending.member ORDER BY name;";
+        const string sql = "SELECT member_id, full_name, email, member_type FROM lending.member ORDER BY full_name;";
+
         var members = new List<Member>();
+
         await using var command = _dataSource.CreateCommand(sql);
         await using var reader = await command.ExecuteReaderAsync();
+
         while (await reader.ReadAsync())
         {
             members.Add(ReadMember(reader));
         }
+
         return members;
     }
-    // CREATE: insert a new member. The database chooses member_id.
+
+    // CREATE: insert a new member. The database chooses its member_id and fills join_date.
     public async Task AddAsync(Member member)
     {
-        const string sql = "INSERT INTO lending.member (name, email, phone, member_type, join_date) " +
-                           "VALUES (@name, @email, @phone, @member_type, @join_date);";
+        const string sql = "INSERT INTO lending.member (full_name, email, member_type) " +
+                           "VALUES (@full_name, @email, @member_type);";
+
         await using var command = _dataSource.CreateCommand(sql);
-        command.Parameters.AddWithValue("name", member.name.Trim());
-        command.Parameters.AddWithValue("email", ToDb(member.Email));
-        command.Parameters.AddWithValue("phone", ToDb(member.Phone));
+        command.Parameters.AddWithValue("full_name", member.FullName);
+        // A C# null must be sent as DBNull.Value
+        command.Parameters.AddWithValue("email", (object?)member.Email ?? DBNull.Value);
         command.Parameters.AddWithValue("member_type", member.MemberType);
-        command.Parameters.AddWithValue("join_date", ToDate(member.JoinDate));
+
         await command.ExecuteNonQueryAsync();
     }
-    // READ: one member by id, or null if there is none.
+
+    // READ: one member, or null when no member has that id.
     public async Task<Member?> GetByIdAsync(long id)
     {
-        const string sql = "SELECT member_id, name, email, phone, member_type, join_date " +
-                           "FROM lending.member WHERE member_id = @id;";
+        const string sql = "SELECT member_id, full_name, email, member_type FROM lending.member WHERE member_id = @id;";
+
         await using var command = _dataSource.CreateCommand(sql);
         command.Parameters.AddWithValue("id", id);
+
         await using var reader = await command.ExecuteReaderAsync();
         return await reader.ReadAsync() ? ReadMember(reader) : null;
     }
-    // UPDATE: change one member.
+
+    // UPDATE: change columns of one member.
     public async Task UpdateAsync(Member member)
     {
         const string sql = "UPDATE lending.member " +
-                           "SET name = @name, email = @email, phone = @phone, " +
-                           "    member_type = @member_type, join_date = @join_date " +
+                           "SET full_name = @full_name, email = @email, member_type = @member_type " +
                            "WHERE member_id = @id;";
+
         await using var command = _dataSource.CreateCommand(sql);
-        command.Parameters.AddWithValue("name", member.name.Trim());
-        command.Parameters.AddWithValue("email", ToDb(member.Email));
-        command.Parameters.AddWithValue("phone", ToDb(member.Phone));
+        command.Parameters.AddWithValue("full_name", member.FullName);
+        command.Parameters.AddWithValue("email", (object?)member.Email ?? DBNull.Value);
         command.Parameters.AddWithValue("member_type", member.MemberType);
-        command.Parameters.AddWithValue("join_date", ToDate(member.JoinDate));
         command.Parameters.AddWithValue("id", member.MemberId);
+
         await command.ExecuteNonQueryAsync();
     }
-    // DELETE: remove one member. Fails if the member still has loans (ON DELETE RESTRICT).
+
+    // DELETE: remove one member. 
     public async Task DeleteAsync(long id)
     {
         const string sql = "DELETE FROM lending.member WHERE member_id = @id;";
+
         await using var command = _dataSource.CreateCommand(sql);
         command.Parameters.AddWithValue("id", id);
+
         await command.ExecuteNonQueryAsync();
     }
 }

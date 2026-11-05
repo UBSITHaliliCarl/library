@@ -2,7 +2,47 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row justify-content-center align-items-center min-vh-75 py-5">
+    <div class="col-lg-10">
+        <div class="card bg-dark text-light border-secondary shadow-lg p-5 text-center position-relative overflow-hidden">
+            <div class="position-absolute top-0 start-50 translate-middle-x bg-primary opacity-3 rounded-circle" style="width: 300px; height: 300px; filter: blur(80px); pointer-events: none;"></div>
+
+            <div class="position-relative z-1">
+                <span class="badge bg-primary bg-opacity-25 text-info px-3 py-2 mb-3 rounded-pill fw-semibold">
+                    📚 Library Management System
+                </span>
+                
+                <h1 class="display-4 fw-bold text-white mb-3">Welcome to Your Library</h1>
+                <p class="lead text-white col-md-8 mx-auto mb-4">
+                    Efficiently manage your book inventory, track library members, and handle database operations seamlessly with ASP.NET Core and PostgreSQL.
+                </p>
+
+                <div class="d-flex justify-content-center gap-3 mb-5">
+                    <a asp-controller="Books" asp-action="Index" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
+                        Explore Books
+                    </a>
+                    <a asp-controller="Members" asp-action="Index" class="btn btn-outline-light px-4 py-2 fw-semibold">
+                        View Members
+                    </a>
+                </div>
+
+                <hr class="border-secondary my-4 opacity-50">
+
+                <div class="row text-start mt-4 g-4">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded bg-secondary bg-opacity-10 border border-secondary border-opacity-25 h-100">
+                            <h5 class="text-info mb-2">📖 Books Catalogue</h5>
+                            <p class="text-secondary small mb-0">Browse through available titles, check categories, update prices, and add new inventory to the library.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded bg-secondary bg-opacity-10 border border-secondary border-opacity-25 h-100">
+                            <h5 class="text-info mb-2">👥 Member Management</h5>
+                            <p class="text-secondary small mb-0">Register regular users, students, or faculty members, update their details, and maintain secure records.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

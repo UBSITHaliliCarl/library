@@ -1,10 +1,8 @@
 ﻿@model Member
 @{
-    ViewData["FullName"] = "Edit a member";
+    ViewData["Title"] = "Edit a member";
 }
-
-<h1 class="mb-3">Edit a member</h1>
-
+<h1 class="mb-3">Edit a <member></member></h1>
 <form asp-action="Edit" method="post" class="card card-body" style="max-width:36rem">
     <input type="hidden" asp-for="MemberId" />
 
@@ -21,14 +19,15 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
         <label asp-for="MemberType" class="form-label"></label>
-        <select asp-for="MemberType" class="form-select">
-            <option value="">(none)</option>
-            <option>Regular</option>
-            <option>Student</option>
-            <option>Senior</option>
-            <option>Textbook</option>
-        </select>
+        <input asp-for="MemberType" class="form-control" />
+        <span asp-validation-for="MemberType" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -41,5 +40,6 @@
         <button type="submit" class="btn btn-primary">Save</button>
         <a asp-action="Index" class="btn btn-link">Cancel</a>
     </div>
+
 </form>
 

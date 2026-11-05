@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,39 +9,47 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/library.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-4 py-3" style="background-color: var(--bg-card); border-color: var(--border-color) !important;">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">library</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <a class="navbar-brand fw-bold text-info fs-4 px-2" asp-area="" asp-controller="Home" asp-action="Index">📚 library</a>
+                <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 ms-3">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        <
+                            <a class="nav-link text-light px-3 fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Books</a>
+                            <a class="nav-link text-light px-3 fw-semibold" asp-area="" asp-controller="Books" asp-action="Index">Books</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3 fw-semibold" asp-area="" asp-controller="Members" asp-action="Index">Members</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3 fw-semibold" asp-area="" asp-controller="Notes" asp-action="Index">Notes</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - library - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top py-4 mt-auto text-muted" style="background-color: var(--bg-card); border-color: var(--border-color) !important;">
+        <div class="container text-center text-secondary">
+            &copy; 2026 - library &bull; <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-info text-decoration-none">Privacy Policy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
