@@ -99,11 +99,19 @@ public class MembersController : Controller
         }
         catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.ForeignKeyViolation)
         {
-            // The member still has loans, and the database refuses to delete them.
-            TempData["Error"] = "That member still has loans, so they cannot be deleted.";
+            var member = await _members.GetByIdAsync(id);
+
+            if (member == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Error = "This member has loans on record, so the database will not delete them.";
+            return View("Delete", member);
         }
+
         return RedirectToAction(nameof(Index));
     }
+
     // Checks that go beyond the model's own rules.
     private void CheckMember(Member member)
     {

@@ -28,3 +28,7 @@
     </form>
 
 </div>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
