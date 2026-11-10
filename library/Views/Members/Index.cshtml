@@ -22,6 +22,7 @@
             <th>Email</th>
             <th class="text-end">Phone</th>
             <th>Member Type</th>
+            <th class="text-end">Books out</th>
             <th>Join Date</th>
             <th style="width:10rem"></th>
         </tr>
@@ -35,6 +36,7 @@
                 <td>@(string.IsNullOrEmpty(member.Email) ? "—" : member.Email)</td>
                 <td class="text-end">@(string.IsNullOrEmpty(member.Phone) ? "—" : member.Phone)</td>
                 <td>@member.MemberType</td>
+                 <td class="text-end">@member.OpenLoans</td>
                 <td>@member.JoinDate</td>
                 <td class="text-end">
                     <a asp-action="Details" asp-route-id="@member.MemberId" class="btn btn-sm btn-outline-primary">Loans</a>
