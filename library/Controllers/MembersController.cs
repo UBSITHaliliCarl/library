@@ -33,21 +33,24 @@ public class MembersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Member member)
     {
-        CheckMember(member);
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            try
-            {
-                await _members.AddAsync(member);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
-            {
-                ModelState.AddModelError(nameof(Member.Email), "That email address is already used by another member.");
-            }
+            return View(member);
         }
-        return View(member);
+
+        try
+        {
+            await _members.AddAsync(member);
+        }
+        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            ModelState.AddModelError("Email", "Another member already uses this email.");
+            return View(member);
+        }
+
+        return RedirectToAction(nameof(Index));
     }
+
     // GET /Members/Edit/5 : show the form filled in.
     public async Task<IActionResult> Edit(long id)
     {
@@ -58,25 +61,27 @@ public class MembersController : Controller
         }
         return View(member);
     }
-    // POST /Members/Edit : the form was submitted.
+    // POST /Members/Edit/5 : the changed form was submitted.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Member member)
     {
-        CheckMember(member);
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            try
-            {
-                await _members.UpdateAsync(member);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
-            {
-                ModelState.AddModelError(nameof(Member.Email), "That email address is already used by another member.");
-            }
+            return View(member);
         }
-        return View(member);
+
+        try
+        {
+            await _members.UpdateAsync(member);
+        }
+        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            ModelState.AddModelError("Email", "Another member already uses this email.");
+            return View(member);
+        }
+
+        return RedirectToAction(nameof(Index));
     }
     // GET /Members/Delete/5 : ask "are you sure?"
     public async Task<IActionResult> Delete(long id)
