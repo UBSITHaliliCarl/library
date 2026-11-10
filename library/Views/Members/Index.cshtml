@@ -37,6 +37,7 @@
                 <td>@member.MemberType</td>
                 <td>@member.JoinDate</td>
                 <td class="text-end">
+                    <a asp-action="Details" asp-route-id="@member.MemberId" class="btn btn-sm btn-outline-primary">Loans</a>
                     <a asp-action="Edit" asp-route-id="@member.MemberId" class="btn btn-sm btn-outline-secondary">Edit</a>
                     <a asp-action="Delete" asp-route-id="@member.MemberId" class="btn btn-sm btn-outline-danger">Delete</a>
                 </td>

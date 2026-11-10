@@ -9,10 +9,15 @@ public class MembersController : Controller
 {
     private static readonly string[] MemberTypes = { "Regular", "Student", "Faculty" };
     private readonly MemberRepository _members;
-    public MembersController(MemberRepository members)
+    private readonly LoanRepository _loans;
+
+    // ASP.NET Core hands in the repositories, because Program.cs registered them.
+    public MembersController(MemberRepository members, LoanRepository loans)
     {
         _members = members;
+        _loans = loans;
     }
+
     // GET /Members : the list.
     public async Task<IActionResult> Index()
     {
@@ -115,6 +120,23 @@ public class MembersController : Controller
         }
 
         return RedirectToAction(nameof(Index));
+    }
+
+    // GET /Members/Details/5 : one member and their loans.
+    public async Task<IActionResult> Details(long id)
+    {
+        var member = await _members.GetByIdAsync(id);
+        if (member == null)
+        {
+            return NotFound();
+        }
+
+        var details = new MemberDetails
+        {
+            Member = member,
+            Loans = await _loans.GetByMemberAsync(id)
+        };
+        return View(details);
     }
 
     // Checks that go beyond the model's own rules.
